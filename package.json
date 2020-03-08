@@ -1,0 +1,28 @@
+{
+  "name": "to-do",
+  "version": "1.0.0",
+  "description": "To-do app in plain JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "lite-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swapnil-bhamat/to-do.git"
+  },
+  "keywords": [
+    "to-do",
+    "js",
+    "javaScript"
+  ],
+  "author": "Swapnil Bhamat",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/swapnil-bhamat/to-do/issues"
+  },
+  "homepage": "https://github.com/swapnil-bhamat/to-do#readme",
+  "devDependencies": {
+    "lite-server": "^2.5.4"
+  }
+}

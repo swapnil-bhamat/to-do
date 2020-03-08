@@ -6,20 +6,14 @@ ToDo.View = (function() {
 
   var addTodo = function(todoId, todoDetails) {
     var newTodoHTML = `
-          <div class="card" id="todo_${todoId}">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-10">
-                  <span>
+          <div class="card mx-auto w-75 bg-info mb-2" id="todo_${todoId}">
+            <div class="card-body pt-2 pb-2 text-light custom-card bg-custom-cyan">
                     ${todoDetails.todo}
-                  </span>
-                </div>
-                <div class="col-2">
-                  <button id="delete_${todoId}" class="btn btn-sm btn-danger">
-                    <i class="fa fa-close"></i>
+                  <button id="delete_${todoId}" class="btn btn-sm btn-info text-dark border-0 bg-custom-cyan font-weight-bold float-right">
+                    X
                   </button>
-                </div>
-              </div>
+
+
             </div>
           </div>`;
     document
@@ -30,7 +24,9 @@ ToDo.View = (function() {
 
   var updateTodoStatus = function(todoId, todoDone) {
     var todoElement = document.getElementById("todo_" + todoId);
-    todoElement.className = todoDone ? "card bg-success" : "card";
+    todoElement.className = todoDone
+      ? "card mx-auto w-75 bg-info mb-2 todo-complete"
+      : "card mx-auto w-75 bg-info mb-2";
   };
 
   var removeTodo = function(todoId) {

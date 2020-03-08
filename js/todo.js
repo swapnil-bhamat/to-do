@@ -22,21 +22,20 @@ var todoModel = (function() {
       todo: todo,
       completed: false
     };
-    return todoObj;
+    return timeStamp;
   };
 
-  var updateTodoStatus = function(todoId, status) {
-    todoObj[todoId]["completed"] = status;
+  var toggleTodoStatus = function(todoId) {
+    todoObj[todoId]["completed"] = !todoObj[todoId]["completed"];
   };
 
   var deleteTodo = function(todoId) {
     delete todoObj[todoId];
-    return todoObj;
   };
   return {
     getAllTodo: getAllTodo,
     addTodo: addTodo,
-    updateTodoStatus: updateTodoStatus,
+    toggleTodoStatus: toggleTodoStatus,
     deleteTodo: deleteTodo
   };
 })();
@@ -57,22 +56,50 @@ var todoController = (function(model) {
       });
   };
 
+  var attachUpdateTodoStatusHandler = function(todoId) {
+    document
+      .getElementById("todo_" + todoId)
+      .addEventListener("click", function(e) {
+        var todoId = this.id.replace(/\D/g, "");
+        toggleTodoStatus(todoId);
+      });
+  };
+
+  var attachDeleteTodoHandler = function(todoId) {
+    document
+      .getElementById("delete_" + todoId)
+      .addEventListener("click", function(e) {
+        e.stopPropagation();
+        var todoId = this.id.replace(/\D/g, "");
+        deleteTodo(todoId);
+      });
+  };
+
   var addTodo = function(todo) {
-    model.addTodo(todo);
+    var todoId = model.addTodo(todo);
+    renderTodoList();
+    attachUpdateTodoStatusHandler(todoId);
+    attachDeleteTodoHandler(todoId);
+  };
+
+  var toggleTodoStatus = function(todoId) {
+    model.toggleTodoStatus(todoId);
     renderTodoList();
   };
 
-  var updateTodoStatus = function() {};
-
-  var deleteTodo = function() {};
+  var deleteTodo = function(todoId) {
+    model.deleteTodo(todoId);
+    renderTodoList();
+  };
 
   var renderTodoList = function() {
     var todoList = model.getAllTodo();
     var todoHTML = ``;
     for (var todoId in todoList) {
       var todoDetail = todoList[todoId];
+      var cardClass = todoDetail.completed ? "card bg-success" : "card";
       todoHTML += `
-      <div class="card" id="${todoId}">
+      <div class="${cardClass}" id="todo_${todoId}">
             <div class="card-body">
               <div class="row">
                 <div class="col-10">

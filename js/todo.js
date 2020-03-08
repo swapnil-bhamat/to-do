@@ -16,6 +16,10 @@ var todoModel = (function() {
     return todoObj;
   };
 
+  var getTodoDetailsById = function(todoId) {
+    return todoObj[todoId];
+  };
+
   var addTodo = function(todo) {
     var timeStamp = new Date().getTime();
     todoObj[timeStamp] = {
@@ -34,29 +38,74 @@ var todoModel = (function() {
   };
   return {
     getAllTodo: getAllTodo,
+    getTodoDetailsById: getTodoDetailsById,
     addTodo: addTodo,
     toggleTodoStatus: toggleTodoStatus,
     deleteTodo: deleteTodo
   };
 })();
 
-var todoController = (function(model) {
-  var init = function() {
-    attachTodoInputHandler();
+var todoView = (function() {
+  var resetTodoInput = function() {
+    document.getElementById("todoInput").value = "";
   };
 
-  var attachTodoInputHandler = function() {
+  var addTodo = function(todoId, todoDetails) {
+    var newTodoHTML = `
+          <div class="card" id="todo_${todoId}">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-10">
+                  <span>
+                    ${todoDetails.todo}
+                  </span>
+                </div>
+                <div class="col-2">
+                  <button id="delete_${todoId}" class="btn btn-sm btn-danger">
+                    <i class="fa fa-close"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>`;
+    document
+      .getElementById("todoList")
+      .insertAdjacentHTML("beforeend", newTodoHTML);
+    resetTodoInput();
+  };
+
+  var updateTodoStatus = function(todoId, todoDone) {
+    var todoElement = document.getElementById("todo_" + todoId);
+    todoElement.className = todoDone ? "card bg-success" : "card";
+  };
+
+  var removeTodo = function(todoId) {
+    var element = document.getElementById("todo_" + todoId);
+    element.parentNode.removeChild(element);
+  };
+  return {
+    addTodo: addTodo,
+    updateTodoStatus: updateTodoStatus,
+    removeTodo: removeTodo
+  };
+})();
+
+var todoController = (function(model, view) {
+  var init = function() {
+    todoInputHandler();
+  };
+
+  var todoInputHandler = function() {
     document
       .getElementById("todoInput")
       .addEventListener("keypress", function(e) {
-        if (e.key === "Enter") {
+        if (e.key === "Enter" && e.target.value !== "") {
           addTodo(e.target.value);
-          e.target.value = "";
         }
       });
   };
 
-  var attachUpdateTodoStatusHandler = function(todoId) {
+  var todoStatusUpdateHandler = function(todoId) {
     document
       .getElementById("todo_" + todoId)
       .addEventListener("click", function(e) {
@@ -65,7 +114,7 @@ var todoController = (function(model) {
       });
   };
 
-  var attachDeleteTodoHandler = function(todoId) {
+  var deleteTodoHandler = function(todoId) {
     document
       .getElementById("delete_" + todoId)
       .addEventListener("click", function(e) {
@@ -77,49 +126,24 @@ var todoController = (function(model) {
 
   var addTodo = function(todo) {
     var todoId = model.addTodo(todo);
-    renderTodoList();
-    attachUpdateTodoStatusHandler(todoId);
-    attachDeleteTodoHandler(todoId);
+    var todoDetails = model.getTodoDetailsById(todoId);
+    view.addTodo(todoId, todoDetails);
+    todoStatusUpdateHandler(todoId);
+    deleteTodoHandler(todoId);
   };
 
   var toggleTodoStatus = function(todoId) {
     model.toggleTodoStatus(todoId);
-    renderTodoList();
+    var todoDetails = model.getTodoDetailsById(todoId);
+    view.updateTodoStatus(todoId, todoDetails.completed);
   };
 
   var deleteTodo = function(todoId) {
     model.deleteTodo(todoId);
-    renderTodoList();
-  };
-
-  var renderTodoList = function() {
-    var todoList = model.getAllTodo();
-    var todoHTML = ``;
-    for (var todoId in todoList) {
-      var todoDetail = todoList[todoId];
-      var cardClass = todoDetail.completed ? "card bg-success" : "card";
-      todoHTML += `
-      <div class="${cardClass}" id="todo_${todoId}">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-10">
-                  <span>
-                    ${todoDetail.todo}
-                  </span>
-                </div>
-                <div class="col-2">
-                  <button id="delete_${todoId}" class="btn btn-sm btn-danger">
-                    <i class="fa fa-close"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>`;
-    }
-    document.getElementById("todoList").innerHTML = todoHTML;
+    view.removeTodo(todoId);
   };
 
   return { init: init };
-})(todoModel);
+})(todoModel, todoView);
 
 todoController.init();

@@ -1,6 +1,6 @@
 # to-do app
 
-This project is created in created in Pure JavaScript. Used ES5 features only to support older browsers.
+This project is created in Pure JavaScript. Used ES5 features only to support older browsers.
 
 ## After cloning
 

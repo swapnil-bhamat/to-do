@@ -2,7 +2,7 @@
 
 This project is created in created in Pure JavaScript. Used ES5 features only to support older browsers.
 
-## After Cloning
+## After cloning
 
 Run `npm install`
 

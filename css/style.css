@@ -17,4 +17,5 @@ body {
 .custom-card {
   border: solid 2px #343a40;
   border-radius: 5px;
+  cursor: pointer;
 }

@@ -28,6 +28,7 @@ ToDo.View = (function() {
         callback(todoId);
       });
   };
+
   var resetTodoInput = function() {
     document.getElementById("todoInput").value = "";
   };
@@ -60,6 +61,7 @@ ToDo.View = (function() {
     var element = document.getElementById("todo_" + todoId);
     element.parentNode.removeChild(element);
   };
+
   return {
     onNewToDoInput: onNewToDoInput,
     onToDoStatusUpdate: onToDoStatusUpdate,

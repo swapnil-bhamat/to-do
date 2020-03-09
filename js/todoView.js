@@ -1,5 +1,33 @@
 var ToDo = ToDo || {};
 ToDo.View = (function() {
+  var onNewToDoInput = function(callback) {
+    document
+      .getElementById("todoInput")
+      .addEventListener("keypress", function(e) {
+        if (e.key === "Enter" && e.target.value !== "") {
+          callback(e.target.value);
+        }
+      });
+  };
+
+  var onToDoStatusUpdate = function(todoId, callback) {
+    document
+      .getElementById("todo_" + todoId)
+      .addEventListener("click", function(e) {
+        var todoId = this.id.replace(/\D/g, "");
+        callback(todoId);
+      });
+  };
+
+  var onToDoDelete = function(todoId, callback) {
+    document
+      .getElementById("delete_" + todoId)
+      .addEventListener("click", function(e) {
+        e.stopPropagation();
+        var todoId = this.id.replace(/\D/g, "");
+        callback(todoId);
+      });
+  };
   var resetTodoInput = function() {
     document.getElementById("todoInput").value = "";
   };
@@ -33,6 +61,9 @@ ToDo.View = (function() {
     element.parentNode.removeChild(element);
   };
   return {
+    onNewToDoInput: onNewToDoInput,
+    onToDoStatusUpdate: onToDoStatusUpdate,
+    onToDoDelete: onToDoDelete,
     addTodo: addTodo,
     updateTodoStatus: updateTodoStatus,
     removeTodo: removeTodo

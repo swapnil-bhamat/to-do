@@ -22,6 +22,11 @@
     <script defer src="./js/todoModel.js"></script>
     <script defer src="./js/todoView.js"></script>
     <script defer src="./js/todoController.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function(event) {
+        ToDo.Controller.init();
+      });
+    </script>
   </head>
   <body class="bg-info">
     <div class="container p-4">

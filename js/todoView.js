@@ -24,9 +24,10 @@ ToDo.View = (function() {
 
   var updateTodoStatus = function(todoId, todoDone) {
     var todoElement = document.getElementById("todo_" + todoId);
+    var baseClasses = "card mx-auto w-75 bg-info mb-2";
     todoElement.className = todoDone
-      ? "card mx-auto w-75 bg-info mb-2 todo-complete"
-      : "card mx-auto w-75 bg-info mb-2";
+      ? baseClasses + " todo-complete"
+      : baseClasses;
   };
 
   var removeTodo = function(todoId) {

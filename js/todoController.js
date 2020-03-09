@@ -54,5 +54,3 @@ ToDo.Controller = (function(model, view) {
 
   return { init: init };
 })(ToDo.Model, ToDo.View);
-
-ToDo.Controller.init();
